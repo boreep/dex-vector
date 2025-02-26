@@ -1,0 +1,35 @@
+python3 detect_from_video.py \
+  --robot-name inspire \
+  --video-path data/human_hand_video.mp4 \
+  --retargeting-type dexpilot \
+  --hand-type right \
+  --output-path data/inspire_joints.pkl 
+  
+  
+  python3 render_robot_hand.py \
+  --pickle-path data/inspire_joints.pkl \
+  --output-video-path data/inspire.mp4 
+  
+
+python3 example/vector_retargeting/Show_realtime_camera.py \
+  --robot-name inspire \
+  --retargeting-type vector \
+  --hand-type left
+
+python3 example/vector_retargeting/show_realtime_retargeting.py \
+  --robot-name inspire \
+  --retargeting-type vector \
+  --hand-type left
+
+python3 example/my_vector/ShowRealtimeVR.py \
+  --robot-name inspire \
+  --retargeting-type vector 
+
+
+
+python3 example/my_vector/ShowRealtimeVR_copy.py \
+  --robot-name inspire \
+  --retargeting-type vector 
+
+
+
