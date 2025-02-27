@@ -41,8 +41,6 @@ class VRHandDetector:
         # 将接收到的消息转换为 numpy 数组
         array_data = np.frombuffer(message, dtype=np.float32) # 假设 float32 类型
         float_matrix = array_data.reshape(rows, cols) 
-        #打印出来接受到数据大小
-        print(f"接收到数据维度：{float_matrix.shape}")
 
         return float_matrix   #维度为[84,7],7代表三维坐标和四元数
 

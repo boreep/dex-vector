@@ -63,11 +63,8 @@ def start_retargeting(robot_dir: Path, left_config_path: Path, right_config_path
 
             left_qpos = left_retargeting.retarget(ref_value)
             right_qpos = right_retargeting.retarget(right_ref_value)
-
-            print(left_qpos)
-
-            # left_robot.set_qpos(left_qpos[left_retargeting_to_sapien])
-            # right_robot.set_qpos(right_qpos[right_retargeting_to_sapien])
+            #[0,4,6,2,8,9]
+            #[if,mf,rf,lf,th_root,th_proximal]
 
 
     except KeyboardInterrupt:
