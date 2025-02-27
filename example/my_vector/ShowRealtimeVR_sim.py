@@ -83,6 +83,8 @@ def start_retargeting(robot_dir: Path, left_config_path: Path, right_config_path
     # 关节映射
     left_sapien_joint_names = [joint.get_name() for joint in left_robot.get_active_joints()]
     left_retargeting_joint_names = left_retargeting.joint_names
+    #['if_proximal_joint', 'if_distal_joint', 'lf_proximal_joint', 'lf_distal_joint', 'mf_proximal_joint', 'mf_distal_joint', 'rf_proximal_joint', 'rf_distal_joint', 'th_root_joint', 'th_proximal_joint', 'th_distal_joint']
+    #[0,4,6,2,8,9]
     left_retargeting_to_sapien = np.array([left_retargeting_joint_names.index(name) for name in left_sapien_joint_names], dtype=int)
 
     right_sapien_joint_names = [joint.get_name() for joint in right_robot.get_active_joints()]
@@ -116,16 +118,12 @@ def start_retargeting(robot_dir: Path, left_config_path: Path, right_config_path
             ref_value = joint_pos[task_indices, :] - joint_pos[origin_indices, :]
             right_ref_value = right_joint_pos[right_task_indices, :] - right_joint_pos[right_origin_indices, :]
 
-            left_qpos = left_retargeting.retarget(ref_value)
-
+            left_qpos = left_retargeting.retarget(ref_value) 
+            #[0,4,6,2,8,9]
+            #[if,mf,rf,lf,th_root,th_proximal]
             right_qpos = right_retargeting.retarget(right_ref_value)
 
-            print(f"待求解量为：{ref_value}")
-
-            print(f"求解出的角度为：{left_qpos}")
-
             left_retargeting.verbose()
-
 
             left_robot.set_qpos(left_qpos[left_retargeting_to_sapien])
             right_robot.set_qpos(right_qpos[right_retargeting_to_sapien])

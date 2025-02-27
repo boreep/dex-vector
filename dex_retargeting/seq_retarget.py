@@ -27,7 +27,7 @@ class SeqRetargeting:
         if has_joint_limits:
             joint_limits[:] = robot.joint_limits[:]
             self.optimizer.set_joint_limit(joint_limits[self.optimizer.idx_pin2target])
-        self.joint_limits = joint_limits[self.optimizer.idx_pin2target]
+        self.joint_limits = joint_limits[self.optimizer.idx_pin2target]#[0,4,6,2,8,9]
 
         # Temporal information
         #记录上一帧的关节角度，用于优化初始值。
