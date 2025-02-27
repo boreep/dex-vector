@@ -5,7 +5,6 @@ import signal
 from pathlib import Path
 from queue import Empty
 
-import cv2
 import numpy as np
 import sapien
 import tyro
@@ -71,12 +70,6 @@ def start_retargeting(robot_dir: Path, left_config_path: Path, right_config_path
     right_filepath = Path(right_config.urdf_path)
     loader.load_multiple_collisions_from_file = True
 
-    # 处理URDF路径
-
-    # if "roh" not in robot_name and "glb" not in robot_name:
-    #     left_filepath = str(left_filepath).replace(".urdf", "_glb.urdf")
-    #     right_filepath = str(right_filepath).replace(".urdf", "_glb.urdf")
-
     left_robot = loader.load(str(left_filepath))
     right_robot = loader.load(str(right_filepath))
     if "inspire"  in robot_name:
@@ -91,12 +84,6 @@ def start_retargeting(robot_dir: Path, left_config_path: Path, right_config_path
     left_sapien_joint_names = [joint.get_name() for joint in left_robot.get_active_joints()]
     left_retargeting_joint_names = left_retargeting.joint_names
     left_retargeting_to_sapien = np.array([left_retargeting_joint_names.index(name) for name in left_sapien_joint_names], dtype=int)
-
-        # 打印关节映射关系和关节名
-    logger.info(f"左SAPIEN 关节名: {left_sapien_joint_names}")
-    logger.info(f"左重定向关节名: {left_retargeting_joint_names}")
-    logger.info(f"Left Retargeting to SAPIEN Mapping: {left_retargeting_to_sapien}")
-
 
     right_sapien_joint_names = [joint.get_name() for joint in right_robot.get_active_joints()]
     right_retargeting_joint_names = right_retargeting.joint_names
@@ -130,11 +117,15 @@ def start_retargeting(robot_dir: Path, left_config_path: Path, right_config_path
             right_ref_value = right_joint_pos[right_task_indices, :] - right_joint_pos[right_origin_indices, :]
 
             left_qpos = left_retargeting.retarget(ref_value)
+
             right_qpos = right_retargeting.retarget(right_ref_value)
 
-            print(left_qpos)
+            print(f"待求解量为：{ref_value}")
 
-            
+            print(f"求解出的角度为：{left_qpos}")
+
+            left_retargeting.verbose()
+
 
             left_robot.set_qpos(left_qpos[left_retargeting_to_sapien])
             right_robot.set_qpos(right_qpos[right_retargeting_to_sapien])
@@ -143,7 +134,7 @@ def start_retargeting(robot_dir: Path, left_config_path: Path, right_config_path
 
     except KeyboardInterrupt:
         logger.info("Retargeting interrupted by user.")
-
+    
 
 def signal_handler(sig, frame):
     """ 处理终止信号 """

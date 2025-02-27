@@ -6,7 +6,6 @@ from pathlib import Path
 from queue import Empty
 
 import cv2
-import numpy as np
 import tyro
 from loguru import logger
 

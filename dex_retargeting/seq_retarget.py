@@ -41,7 +41,6 @@ class SeqRetargeting:
         # Warm started
         self.is_warm_started = False
 
-
 #vector模式不会用到这个函数
     def warm_start(
         self,
@@ -132,7 +131,7 @@ class SeqRetargeting:
             last_qpos=np.clip(self.last_qpos, self.joint_limits[:, 0], self.joint_limits[:, 1]),
             #last_qpos 作为优化的初始值，但会被 clip() 限制在关节范围内。
         )
-        
+
         # 累加时间差，用于跟踪总执行时间
         self.accumulated_time += time.perf_counter() - tic
         # 增加重定位次数计数
