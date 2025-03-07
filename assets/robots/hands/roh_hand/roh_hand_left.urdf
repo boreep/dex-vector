@@ -103,10 +103,11 @@
     <axis
       xyz="0 1 0" />
     <limit
-        lower="-1.176"
-        upper="0.292"
+        lower="-1.058"
+        upper="0.3062"
         effort="0.5"
         velocity="1" />
+        <!-- 补偿数为2.8069436083614603，约为160.8度,范围100.22°~178.37°-->
   </joint>
   <link
     name="if_distal_link">
@@ -221,10 +222,11 @@
     <axis
       xyz="0 1 0" />
     <limit 
-        lower="-1.17"
-        upper="0.28"
+        lower="-1.069"
+        upper="0.2963"
         effort="0.5"
         velocity="1" />
+        <!--补偿值为 2.7765308802396014 ，约为159.0817，范围97.81° ~ 176.06°-->
   </joint>
   <link
     name="mf_distal_link">
@@ -339,10 +341,11 @@
     <axis
       xyz="0 1 0" />
     <limit 
-        lower="-1.18"
-        upper="0.29"
+        lower="-1.011"
+        upper="0.3006"
         effort="0.5"
         velocity="1" />
+        <!-- 补偿值为2.7806045952072487，约为159.317 范围101.38° ~ 176.54°-->
   </joint>
   <link
     name="rf_distal_link">
@@ -457,10 +460,11 @@
     <axis
       xyz="0 1 0" />
     <limit 
-        lower="-1.18"
-        upper="0.29"
+        lower="-1.0292"
+        upper="0.2976"
         effort="0.5"
         velocity="1" />
+        <!-- 补偿值为2.7543096279771366，约为157.8098度 范围98.84° ~ 174.86°-->
 
   </joint>
   <link
@@ -634,11 +638,11 @@
     <axis
       xyz="0 0 -1" />
     <limit 
-        lower="-0.65"
-        upper="0.215"
+        lower="-0.385"
+        upper="0.217"
         effort="0.5"
         velocity="1" />
-
+        <!-- 补偿数值为 0.4243102998823798，约为24.3112度 ，范围2.26° ~ 36.76° -->
   </joint>
   <link
     name="th_distal_link">

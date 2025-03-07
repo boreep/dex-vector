@@ -6,7 +6,7 @@ angles_1 = []
 angles_2 = []
 
 # 设置手指ID和位置范围
-finger_id = 4 # 选择手指ID，例如 0（拇指）或 1,2,3,4（其他手指）
+finger_id = 4# 选择手指ID，例如 0（拇指）或 1,2,3,4（其他手指）
 if finger_id != 0:
     positions = np.linspace(-0.003, 0.016, 100)  
     for pos in positions:

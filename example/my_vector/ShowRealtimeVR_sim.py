@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import math
 import time
 import threading
 import signal
@@ -16,9 +17,10 @@ from dex_retargeting.constants import RobotName, RetargetingType, HandType, get_
 from dex_retargeting.retargeting_config import RetargetingConfig
 from VR_hand_detector import VRHandDetector
 
+
 stop_flag = threading.Event()
 
-def start_retargeting(robot_dir: Path, left_config_path: Path, right_config_path: Path):
+def start_retargeting(robot_dir: Path, left_config_path: Path, right_config_path: Path ):
     """ 启动机器人重定向进程 """
     RetargetingConfig.set_default_urdf_dir(str(robot_dir))
     logger.info(f"Starting retargeting with config: {left_config_path}and {right_config_path}")
@@ -123,8 +125,36 @@ def start_retargeting(robot_dir: Path, left_config_path: Path, right_config_path
             #[if,mf,rf,lf,th_root,th_proximal]
             right_qpos = right_retargeting.retarget(right_ref_value)
 
-            left_retargeting.verbose()
 
+            OffsetAngleForURDF = [0.4243102998823798, 2.8069436083614603, 2.7765308802396014, 2.7806045952072487, 2.7543096279771366]
+            selected_left_qpos = [left_qpos[i] for i in [9, 0, 4, 6, 2, 8]] # 注意这里的索引应该是正确的
+            #[th_proximal,if,mf,rf,lf,th_root]
+            selected_right_qpos = [right_qpos[i] for i in [9, 0, 4, 6, 2, 8]]
+            # 确保我们不会访问超出范围的索引
+            left_real_qpos = [
+                selected_left_qpos[0] + OffsetAngleForURDF[0], 
+                selected_left_qpos[1] + OffsetAngleForURDF[1],
+                selected_left_qpos[2] + OffsetAngleForURDF[2], 
+                selected_left_qpos[3] + OffsetAngleForURDF[3],
+                selected_left_qpos[4] + OffsetAngleForURDF[4], 
+                selected_left_qpos[5]   # 对于th_root，不需要额外的偏移
+            ]
+
+            right_real_qpos = [
+                selected_right_qpos[0] + OffsetAngleForURDF[0],
+                selected_right_qpos[1] + OffsetAngleForURDF[1],
+                selected_right_qpos[2] + OffsetAngleForURDF[2], 
+                selected_right_qpos[3] + OffsetAngleForURDF[3],
+                selected_right_qpos[4] + OffsetAngleForURDF[4], 
+                selected_right_qpos[5]   # 对于th_root，不需要额外的偏移
+            ]
+
+            # 将弧度转换为角度
+            left_real_angles = [int(angle * 180 / math.pi) for angle in left_real_qpos] # 直接转换为整数
+            right_real_angles =[int(angle * 180 / math.pi) for angle in right_real_qpos]
+            print(left_real_angles)
+ 
+ 
             left_robot.set_qpos(left_qpos[left_retargeting_to_sapien])
             right_robot.set_qpos(right_qpos[right_retargeting_to_sapien])
 
@@ -148,6 +178,7 @@ def main():
     robot_dir = Path(__file__).resolve().parents[2] / "assets" / "robots" / "hands"
     #robot_dir = "/home/user/project/assets/robots/hands"
     signal.signal(signal.SIGINT, signal_handler)  # 捕获 Ctrl+C 信号
+
 
     threading.Thread(target=start_retargeting, args=(robot_dir, left_config_path, right_config_path), daemon=True).start()
 
